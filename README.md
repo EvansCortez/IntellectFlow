@@ -39,22 +39,54 @@ Most "AI code review" demos are a single LLM call on a small snippet. IntellectF
 - Designing for eventual async/background processing (webhook-triggered runs)
 ---
  
+## Quick Start
+
+Requires **Python 3.11–3.13** (3.14 is not yet supported by all dependencies).
+
+```bash
+# Clone and enter the repo
+cd IntellectFlow
+
+# Create a virtual environment and install dependencies
+python3.12 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+# Optional: enable LLM enrichment (Claude summary + logic-level checks)
+cp .env.example .env
+# Edit .env and set ANTHROPIC_API_KEY
+
+# Run an audit on the sample vulnerable file
+python main.py samples/vulnerable_example.py
+
+# Or get a Markdown report
+python main.py samples/vulnerable_example.py --format markdown
+
+# Start the API server
+uvicorn api.app:app --reload
+# Then POST a .py file to http://127.0.0.1:8000/audit or /audit/markdown
+```
+
+The CLI runs the **Security Agent** and **Structure Agent** in parallel via LangGraph, then prints a single report (JSON or Markdown).
+
+---
+
 ## Status
- 
+
 🚧 **Early development.**
- 
-- [ ] Core single-agent pipeline (security agent, JSON output)
-- [ ] Multi-agent orchestration (LangGraph)
-- [ ] Static analysis grounding layer
-- [ ] Markdown report generation
+
+- [x] Core single-agent pipeline (security agent, JSON output)
+- [x] Multi-agent orchestration (LangGraph)
+- [x] Static analysis grounding layer (Bandit + AST)
+- [x] Markdown report generation
+- [x] FastAPI endpoint
 - [ ] Frontend dashboard
 - [ ] GitHub webhook integration
-Currently focused on getting one agent working end-to-end before adding orchestration complexity.
- 
+
 ---
- 
+
 ## License
- 
+
 MIT
  
 
